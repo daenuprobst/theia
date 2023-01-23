@@ -1,18 +1,12 @@
-FROM pytorch/pytorch:latest
+FROM continuumio/miniconda3:22.11.1
 ENV PYTHONUNBUFFERED=1
 RUN apt-get update \
     && apt-get install -y build-essential \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /usr/src/app
-COPY ./src src 
-COPY ./MANIFEST.in . 
-COPY ./LICENSE .
-COPY ./setup.cfg .
-COPY ./setup.py .
-COPY ./pyproject.toml .
-COPY ./README.md .
+COPY ./requirements.txt .
 COPY ./gunicorn_start.sh .
 RUN pip install gunicorn
-RUN pip install .
+RUN pip install -U -r  requirements.txt
 RUN chmod +x gunicorn_start.sh
 ENTRYPOINT ["./gunicorn_start.sh"]
