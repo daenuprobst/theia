@@ -1,0 +1,2 @@
+notebook==6.5.2
+faerun-notebook==0.1.6b0

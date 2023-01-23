@@ -138,6 +138,7 @@ dmypy.json
 *.tsv.gz
 
 !rheadb.csv.gz
+!rhea-reactions.csv.gz
 !ecreact-nofilter-1.0.csv.gz
 
 /experiments

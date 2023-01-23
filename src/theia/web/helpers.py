@@ -89,9 +89,9 @@ def predict(
     topk: int = 10,
 ) -> Tuple[str, Dict[str, float], List[int]]:
     data_sample = next(iter(DataLoader(data_set)))
-    data_sample.to(device)
+    data_sample = data_sample.to(device)
     pred_raw = model(data_sample)
-    probs = flatten(functional.softmax(pred_raw, dim=1)).detach().numpy()
+    probs = flatten(functional.softmax(pred_raw, dim=1)).cpu().detach().numpy()
     pred = pred_raw.max(1, keepdim=True)[1]
     y_pred = flatten(pred).tolist()
 

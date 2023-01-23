@@ -35,6 +35,7 @@ def ec():
     smiles = params["smiles"]
 
     model, label_encoder, background, drfp_map = models[source][m]
+    model = model.to(device)
     dataset = InferenceReactionDataset([smiles])
 
     pred, probs, topk_indices = predict(model, device, dataset, label_encoder, 5)
