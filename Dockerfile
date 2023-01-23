@@ -10,4 +10,4 @@ RUN conda install pytorch cpuonly pandas=1.4.3 scikit-learn=1.1.1 -c pytorch
 RUN pip install gunicorn
 RUN pip install -U -r  requirements.txt
 RUN chmod +x gunicorn_start.sh
-# ENTRYPOINT ["./gunicorn_start.sh"]
+ENTRYPOINT ["./gunicorn_start.sh"]
