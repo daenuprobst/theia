@@ -1,0 +1,586 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+<div class="columns">
+    <div class="column is-full">
+        <div class="block">
+            <div class="field has-addons">
+                <p class="control">
+                    <a class="button is-info js-modal-trigger" data-target="modal-js-marvin">
+                        <i class="fas fa-pen" aria-hidden="true"></i>
+                    </a>
+                </p>
+                <p class="control has-icons-left is-expanded">
+                    <input id="search-box" class="input" type="text" placeholder="Reaction SMILES"
+                        onkeyup="queryChangedByUser()">
+                    <span class="icon is-left">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </span>
+                </p>
+                <p class="control">
+                    <a class="button is-info" onclick="getKNNs()">
+                        Search & Predict
+                    </a>
+                </p>
+            </div>
+            <div class="level is-mobile">
+                <div class="level-left">
+                    <div class="level-item">
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="model-source" value="rheadb" checked>
+                                Rhea
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="model-source" value="ecreact">
+                                ECREACT
+                            </label>
+                        </div>
+                    </div>
+                    <div class="level-item">
+                        <div style="margin-top: 2px">
+                            <button class="button is-ghost is-small js-modal-trigger"
+                                data-target="modal-model-help">What is this?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <article id="query-preview-message" class="message is-warning is-small is-hidden">
+                <div class="message-header">
+                    <p>Query Preview</p>
+                </div>
+                <div class="message-body" style="overflow-y:scroll">
+                    <img id="query-preview"></img>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+<div class="columns">
+    <div class="column is-full">
+        <div class="block">
+            <div class="tabs is-boxed mb-0">
+                <ul>
+                    <li class="is-active">
+                        <a>
+                            <span class="icon is-small"><i class="fa-solid fa-layer-group"></i></span>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="block tab-content is-active mt-0">
+                <div class="has-border has-no-top-border">
+                    <div class="block p-1">
+                        <div class="columns">
+                            <div class="column is-one-third">
+                                <div id="prediction-container-ec1" class="block">
+                                    <p
+                                        class="is-uppercase has-text-weight-bold is-size-6 has-text-grey-light has-text-centered p-6">
+                                        No
+                                        predictions yet</p>
+                                </div>
+                            </div>
+                            <div class="column is-one-third">
+                                <div id="prediction-container-ec12" class="block">
+                                    <p
+                                        class="is-uppercase has-text-weight-bold is-size-6 has-text-grey-light has-text-centered p-6">
+                                        No
+                                        predictions yet</p>
+                                </div>
+                            </div>
+                            <div class="column is-one-third">
+                                <div id="prediction-container-ec123" class="block">
+                                    <p
+                                        class="is-uppercase has-text-weight-bold is-size-6 has-text-grey-light has-text-centered p-6">
+                                        No
+                                        predictions yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="columns">
+    <div class="column is-full">
+        <div class="block">
+            <div class="tabs is-boxed mb-0">
+                <ul id="mainTabContainer">
+                    <li class="is-active" data-target-id="tab-1">
+                        <a>
+                            <span class="icon is-small"><i class="fa-solid fa-sitemap"></i></span>
+                            <span>Explain EC x</span>
+                        </a>
+                    </li>
+                    <li data-target-id="tab-2">
+                        <a>
+                            <span class="icon is-small"><i class="fa-solid fa-sitemap"></i></span>
+                            <span>Explain EC x.y</span>
+                        </a>
+                    </li>
+                    <li data-target-id="tab-3">
+                        <a>
+                            <span class="icon is-small"><i class="fa-solid fa-sitemap"></i></span>
+                            <span>Explain EC x.y.z</span>
+                        </a>
+                    </li>
+                    <li data-target-id="tab-4">
+                        <a>
+                            <span class="icon is-small"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <span>Rhea Similarity Search</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="tab-1" class="block tab-content is-active mt-0">
+                <div id="results-container-ec1" class="has-border has-no-top-border">
+                    <p class="is-uppercase has-text-weight-bold is-size-6 has-text-grey-light has-text-centered p-6">No
+                        explanation yet</p>
+                </div>
+            </div>
+            <div id="tab-2" class="block tab-content mt-0">
+                <div id="results-container-ec12" class="has-border has-no-top-border">
+                    <p class="is-uppercase has-text-weight-bold is-size-6 has-text-grey-light has-text-centered p-6">No
+                        explanation yet
+                    </p>
+
+                </div>
+            </div>
+            <div id="tab-3" class="block tab-content mt-0">
+                <div id="results-container-ec123" class="has-border has-no-top-border">
+                    <p class="is-uppercase has-text-weight-bold is-size-6 has-text-grey-light has-text-centered p-6">No
+                        explanation yet</p>
+                </div>
+            </div>
+            <div id="tab-4" class="block tab-content mt-0">
+                <div id="results-container-rhea" class="has-border has-no-top-border">
+                    <p class="is-uppercase has-text-weight-bold is-size-6 has-text-grey-light has-text-centered p-6">No
+                        search results yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The structure drawing modal -->
+<div id="modal-js-marvin" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="width: 1024px">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Draw a Reaction</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <iframe id="ketcher-frame"
+                src="{{url_for('static', filename = 'ketcher/index.html')}}?hiddenControls=open,clear,save,copy,cut,text,shapes"
+                style="width: 984px; height: 600px"></iframe>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" onclick="getKetcherSmiles()">Search</button>
+            <button class="button">Cancel</button>
+        </footer>
+    </div>
+</div>
+<!-- The model help modal -->
+<div id="modal-model-help" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Models</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            There are two models available, one trained on reactions extracted from the <b><a
+                    href="https://www.rhea-db.org/" target="_blank">Rhea</a></b> database and one on the
+            ECREACT data. <b><a href="https://github.com/rxn4chemistry/biocatalysis-model#ecreact"
+                    target="_blank">ECREACT</a></b> contains all reactions from Rhea plus additional reactions extracted
+            from
+            BRENDA, PathBank and MetaNetX.
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button">Close</button>
+        </footer>
+    </div>
+</div>
+{% endblock %}
+
+{% block foot %}
+<script>
+    let tabs = new BulmaTabs('mainTabContainer');
+    let tmap = null;
+    let selectedSmiles = "";
+
+    function getKetcherSmiles() {
+        let ketcher = document.getElementById('ketcher-frame').contentWindow.ketcher;
+        let searchBox = document.getElementById('search-box');
+
+        ketcher.getSmiles().then(smiles => {
+            searchBox.value = smiles;
+        });
+    }
+
+    function getModelSource() {
+        return document.querySelector('input[name="model-source"]:checked').value;
+    }
+
+    function queryChangedByUser() {
+        selectedSmiles = document.getElementById('search-box').value;
+        drawQueryPreview();
+    }
+
+    function drawQueryPreview() {
+        let searchBox = document.getElementById('search-box');
+        let queryPreviewMessage = document.getElementById('query-preview-message');
+
+        if (searchBox.value == '') {
+            queryPreviewMessage.classList.add('is-hidden');
+        } else {
+            queryPreviewMessage.classList.remove('is-hidden');
+        }
+
+        let sd = new SmiDrawer({ scale: 0.75, compactDrawing: false }, {});
+        sd.draw(searchBox.value, '#query-preview', 'oldschool', success => {
+            queryPreviewMessage.classList.replace('is-danger', 'is-light');
+        }, error => {
+            queryPreviewMessage.classList.replace('is-light', 'is-danger');
+        })
+    }
+
+    function setLoading(id) {
+        let l = tag.p(tag.img('', { 'class': 'spinner', 'src': '{{ url_for("static", filename="img/chemistry.gif") }}' }), { 'class': 'has-text-centered' });
+        let element = document.getElementById(id);
+        element.innerHTML = '';
+        element.appendChild(l);
+    }
+
+    function loadPredictions(smiles) {
+        predict('ec1', smiles, 'prediction-container-ec1');
+        predict('ec12', smiles, 'prediction-container-ec12');
+        predict('ec123', smiles, 'prediction-container-ec123');
+    }
+
+    function createTable(id) {
+        return tag.table([
+            tag.thead([
+                tag.th('EC'),
+                tag.th('Probability', { 'class': 'has-text-right' })
+            ]),
+            tag.tbody('', { id: id })
+        ], { 'class': 'table is bordered is-hoverable is-size-7' })
+    }
+
+    function loadPredictionForResult(item) {
+        let searchBox = document.getElementById('search-box');
+        searchBox.value = item.rxn;
+        drawQueryPreview();
+        getKNNs();
+        tabs.setActiveByIndex(0);
+    }
+
+    function populateResultsExplainer(items, ec) {
+        const id = 'results-container-' + ec;
+        let resultsContainer = document.getElementById(id);
+        resultsContainer.innerHTML = ''
+
+        for (const item of items) {
+            addExplainerCard(item, resultsContainer);
+        }
+    }
+
+    function populateResultsKNN(items) {
+        let resultsContainer = document.getElementById('results-container-rhea');
+        resultsContainer.innerHTML = ''
+
+        for (const item of items) {
+            addNNCard(item, resultsContainer);
+        }
+    }
+
+
+    function completeEC(ec) {
+        let vals = ec.split('.');
+
+        for (let i = vals.length; i < 4; i++) {
+            vals.push('-');
+        }
+
+        return vals.join('.');
+    }
+
+    function getFragmentTable(values, sdFragments) {
+        let rows = values.filter(value => value[0].length > 0).map(value => {
+            let containerLeft = tag.div([], { 'class': 'level-left structures-container' })
+            let container = tag.div(containerLeft, { 'class': 'level' });
+
+            for (let smiles of value[0]) {
+                let img = tag.img([], { 'title': smiles });
+                sdFragments.draw(smiles, img);
+                containerLeft.appendChild(img);
+            }
+
+            return tag.tr([
+                tag.td(Math.round(100 * value[1]) / 100),
+                tag.td(container)
+            ], { 'class': value[1] > 0.0 ? 'has-background-success-light' : 'has-background-danger-light' });
+        });
+
+        return tag.div(
+            tag.table([
+                tag.thead(tag.tr([
+                    tag.th('SHAP Value'),
+                    tag.th('Fragment(s)')
+                ])),
+                tag.tbody(rows)
+            ], { 'class': 'table is-fullwidth is-bordered is-narrow is-size-7' }), { 'class': 'table-container' })
+    }
+
+
+    function addExplainerCard(item, container) {
+        let sd = new SmiDrawer({ scale: 0.75, weights: { sigma: 12, opacity: 0.75, additionalPadding: 25 } }, { weights: { normalize: false } });
+        let sdFragments = new SmiDrawer({ scale: 0.75, compactDrawing: false });
+        let predictButton = tag.button('Predict', { 'class': 'button' });
+        let iconExternal = tag.i('', { 'class': 'fa fa-external-link', 'aria-hidden': 'true' });
+        let toggleButtons = [
+            tag.button('Positive', { 'class': 'button is-light' }),
+            tag.button('Both', { 'class': 'button is-primary' }),
+            tag.button('Negative', { 'class': 'button is-light' })
+        ];
+        let toggleButtonContainer = tag.div(toggleButtons, { 'class': 'buttons are-small has-addons' });
+        let fragmentButton = tag.button('Show Fragments', { 'class': 'button is-light is-small' })
+        let depictionContainer = tag.div('', { 'class': 'block ', 'style': 'overflow-y: scroll' })
+
+        let abs_neg = Math.round(100 * Math.abs(item['explain']['abs_neg_pos'][0])) / 100;
+        let abs_pos = Math.round(100 * item['explain']['abs_neg_pos'][1]) / 100;
+        let abs_sum = Math.round(100 * (abs_pos - abs_neg)) / 100;
+
+        let abs_tot = abs_neg + abs_pos;
+        let abs_neg_pct = Math.round(100 * abs_neg / abs_tot);
+        let abs_pos_pct = Math.round(100 * abs_pos / abs_tot);
+
+        let reactantFragments = item.explain.reactant_fragments.sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+        let productFragments = item.explain.product_fragments.sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+        let missingFragments = item.explain.top_missing_fragments.sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+
+        let fragments = tag.div([
+            tag.div([
+                tag.p('Reactant Fragments', { 'class': 'is-size-6 has-text-weight-semibold' }),
+                getFragmentTable(reactantFragments, sdFragments)
+            ], { 'class': 'column' }),
+            tag.div([
+                tag.p('Product Fragments', { 'class': 'is-size-6 has-text-weight-semibold' }),
+                getFragmentTable(productFragments, sdFragments)
+            ], { 'class': 'column' }),
+            tag.div([
+                tag.p('Missing Fragments', { 'class': 'is-size-6 has-text-weight-semibold' }),
+                getFragmentTable(missingFragments, sdFragments)
+            ], { 'class': 'column is-half' })
+        ], { 'class': 'columns is-hidden' });
+
+        container.appendChild(
+            tag.div(
+                tag.div([
+                    tag.div(
+                        tag.div([
+                            (item['ec'] === '-') ? tag.div(predictButton, { 'class': 'block', id: `predict-${item['id']}` }) : tag.p(tag.a([iconExternal, ' EC ' + completeEC(item['ec'])], { href: 'https://enzyme.expasy.org/EC/' + completeEC(item['ec']), target: 'blank' }), { 'class': 'subtitle is-5' }),
+                            tag.div(tag.div([
+                                tag.div(toggleButtonContainer, { 'class': 'level-item' }),
+                                tag.div(fragmentButton, { 'class': 'level-item' })
+                            ], { 'class': 'level-left' }), { 'class': 'level' }),
+                            depictionContainer,
+                            fragments,
+                            tag.div([
+                                tag.div('Positive Contribution [%]'),
+                                tag.div('Negative Contribution [%]')
+                            ], { 'class': 'legend mb-1' }),
+                            tag.div([
+                                tag.span('', { 'style': 'width: ' + abs_pos_pct + '%' }),
+                                tag.span('', { 'style': 'width: ' + abs_neg_pct + '%' })
+                            ], { 'class': 'stackedbar' }),
+                            tag.div([
+                                tag.div(`Absolute SHAP value: ${abs_sum} = ${abs_pos} - ${abs_neg}`),
+                            ], { 'class': 'shap-absolute has-text-grey' })
+                        ], { 'class': 'content' }),
+                        { 'class': 'card-content' }),
+                ], { 'class': 'card is-shadowless has-light-border-bottom' })
+                , { 'class': 'block mb-0' })
+        )
+
+
+        // The following really needs some refactoring
+        sd.draw(item.rxn, 'img', 'oldschool', img => {
+            depictionContainer.innerHTML = '';
+            depictionContainer.appendChild(img);
+        }, null, { 'products': item['explain']['product_weights'], 'reactants': item['explain']['reactant_weights'] });
+
+        toggleButtons[0].addEventListener('click', () => {
+            toggleButtons[0].classList.add('is-primary');
+            toggleButtons[0].classList.remove('is-light');
+            toggleButtons[1].classList.remove('is-primary');
+            toggleButtons[2].classList.remove('is-primary');
+            toggleButtons[1].classList.add('is-light');
+            toggleButtons[2].classList.add('is-light');
+
+            sd.draw(item.rxn, 'img', 'oldschool', img => {
+                // Avoid "jumps" due to resizing when removing the image
+                depictionContainer.style.minHeight = depictionContainer.clientHeight + 'px';
+                depictionContainer.innerHTML = '';
+                depictionContainer.appendChild(img);
+            }, null, { 'products': item['explain']['pos_product_weights'], 'reactants': item['explain']['pos_reactant_weights'] });
+        });
+
+        toggleButtons[1].addEventListener('click', () => {
+            toggleButtons[1].classList.add('is-primary');
+            toggleButtons[1].classList.remove('is-light');
+            toggleButtons[0].classList.remove('is-primary');
+            toggleButtons[2].classList.remove('is-primary');
+            toggleButtons[0].classList.add('is-light');
+            toggleButtons[2].classList.add('is-light');
+
+            sd.draw(item.rxn, 'img', 'oldschool', svg => {
+                // Avoid "jumps" due to resizing when removing the image
+                depictionContainer.style.minHeight = depictionContainer.clientHeight + 'px';
+                depictionContainer.innerHTML = '';
+                depictionContainer.appendChild(svg);
+            }, null, { 'products': item['explain']['product_weights'], 'reactants': item['explain']['reactant_weights'] });
+        });
+
+        toggleButtons[2].addEventListener('click', () => {
+            toggleButtons[2].classList.add('is-primary');
+            toggleButtons[2].classList.remove('is-light');
+            toggleButtons[0].classList.remove('is-primary');
+            toggleButtons[1].classList.remove('is-primary');
+            toggleButtons[0].classList.add('is-light');
+            toggleButtons[1].classList.add('is-light');
+
+            sd.draw(item.rxn, 'img', 'oldschool', svg => {
+                // Avoid "jumps" due to resizing when removing the image
+                depictionContainer.style.minHeight = depictionContainer.clientHeight + 'px';
+                depictionContainer.innerHTML = '';
+                depictionContainer.appendChild(svg);
+            }, null, { 'products': item['explain']['neg_product_weights'], 'reactants': item['explain']['neg_reactant_weights'] });
+        });
+
+        fragmentButton.addEventListener('click', () => {
+            if (fragments.classList.contains('is-hidden')) {
+                fragments.classList.remove('is-hidden');
+                fragmentButton.classList.remove('is-light');
+                fragmentButton.classList.add('is-primary');
+            } else {
+                fragments.classList.add('is-hidden');
+                fragmentButton.classList.add('is-light');
+                fragmentButton.classList.remove('is-primary');
+            }
+        });
+    }
+
+    function addNNCard(item, container) {
+        let sd = new SmiDrawer({ scale: 0.75, compactDrawing: false });
+        let predictButton = tag.button('Predict', { 'class': 'button' });
+        let iconExternal = tag.i('', { 'class': 'fa fa-external-link', 'aria-hidden': 'true' });
+        let uniprotId = 'uniprot-link-' + item['id'];
+
+        sd.draw(item.rxn, 'svg', 'oldschool', svg => {
+            container.appendChild(
+                tag.div(
+                    tag.div(
+                        [
+                            tag.div(
+                                tag.div(
+                                    [
+                                        tag.p(tag.a(
+                                            'RHEA:' + item['id'],
+                                            { 'href': 'https://www.rhea-db.org/rhea/' + item['id'], 'target': 'blank' }
+                                        ), { 'class': 'title is-3' }),
+                                        (item['ec'] === '-') ? tag.div(predictButton, { 'class': 'block', id: `predict-${item['id']}` }) : tag.p(tag.a([iconExternal, ' EC ' + completeEC(item['ec'])], { href: 'https://enzyme.expasy.org/EC/' + completeEC(item['ec']), target: 'blank' }), { 'class': 'subtitle is-5' }),
+                                        tag.div(svg, { 'class': 'block', 'style': 'overflow-y: scroll' }),
+                                        tag.p(item['definition'], { 'class': 'block', 'style': 'overflow-y: scroll' }),
+                                    ],
+                                    { 'class': 'content' }
+                                ),
+                                { 'class': 'card-content' }
+                            ),
+                        ], { 'class': 'card is-shadowless has-light-border-bottom' }
+                    ),
+                    { 'class': 'block mb-0' }
+                )
+            )
+
+            predictButton.addEventListener('click', (element, e) => {
+                loadPredictionForResult(item);
+            });
+        });
+    }
+
+    function getKNNs() {
+        let smiles = document.getElementById('search-box').value;
+        selectedSmiles = smiles;
+
+        axios.post('{{ url_for("search.knn") }}', {
+            smiles: smiles,
+            k: 10
+        }).then(response => {
+            let items = response['data']['items'];
+            populateResultsKNN(items);
+            // selectTMAP(items.map(item => item.index));
+        }).catch(error => {
+            console.log('Error: ', error);
+        });
+
+        // Meanwhile, also load predictions
+        loadPredictions(smiles);
+    }
+
+    function predict(model, smiles, container, maxPreidictions = 5) {
+        setLoading(container);
+        setLoading('results-container-' + model);
+
+        const source = getModelSource();
+
+        axios.post('{{ url_for("predict.ec") }}', {
+            smiles: smiles,
+            model: model,
+            source: source
+        }).then(response => {
+            let c = document.getElementById(container);
+            let tbody = tag.tbody('');
+            let t = tag.table([
+                tag.thead(tag.tr([
+                    tag.th('EC'),
+                    tag.th('Probability', { 'class': 'has-text-right' })
+                ])),
+                tbody
+            ], { 'class': 'table is-bordered is-hoverable is-fullwidth is-size-6' })
+
+            let i = 0;
+            for (let pred of response['data']['pred']) {
+                tbody.appendChild(
+                    tag.tr([
+                        tag.td(pred['ec']),
+                        tag.td((Math.round(parseFloat(pred['prob']) * 10000) / 100) + ' %', { 'class': 'has-text-right' })
+                    ])
+                )
+
+                if (++i >= maxPreidictions) {
+                    break;
+                }
+            }
+
+            c.innerHTML = '';
+            c.appendChild(t);
+
+            populateResultsExplainer(response['data']['pred'], model);
+        }).catch(error => {
+            console.log('Error: ', error);
+        });
+    }
+</script>
+{% endblock %}

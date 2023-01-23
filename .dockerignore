@@ -1,0 +1,5 @@
+experiments/
+**/.git
+data/*-train.csv
+data/*-valid.csv
+data/*-test.csv

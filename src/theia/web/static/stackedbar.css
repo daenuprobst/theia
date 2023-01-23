@@ -1,0 +1,56 @@
+.stackedbar {
+    display: flex;
+    height: 5px
+}
+
+.stackedbar>* {
+    display: inline-block;
+    height: 5px;
+}
+
+.stackedbar>*:nth-child(1) {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: #4d9221;
+}
+
+.stackedbar>*:nth-child(2) {
+    background-color: #c51b7d;
+}
+
+.stackedbar>*:nth-child(3) {
+    background-color: #e67e22;
+}
+
+.stackedbar>*:nth-child(4) {
+    background-color: #3498db;
+}
+
+.stackedbar>*:nth-child(5) {
+    background-color: #1abc9c;
+}
+
+.stackedbar>*:nth-child(6) {
+    background-color: #e74c3c;
+}
+
+.stackedbar>*:nth-child(7) {
+    background-color: #34495e;
+}
+
+.stackedbar>*:nth-child(8) {
+    background-color: #f1c40f;
+}
+
+.stackedbar>*:nth-child(9) {
+    background-color: #8e44ad;
+}
+
+.stackedbar>*:nth-child(10) {
+    background-color: #27ae60;
+}
+
+.stackedbar>*:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

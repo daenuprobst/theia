@@ -1,0 +1,4 @@
+recursive-include src/theia/models *
+recursive-include src/theia/data *
+recursive-include src/theia/web/static *
+recursive-include src/theia/web/templates *

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ url_for('static', filename='favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+
+
+    <title>Theia</title>
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">-->
+    <link rel="stylesheet"
+        href="https://bulma-on-demand.vercel.app/api/bulma-0.9.4.css?primary=%2321445B&link=%2321445B&info=%2321445B&success=%235D8A66&danger=%23c51b7d&white-ter=%23f0f0f0&warning=%234D6575"
+        integrity="sha512-5XTq1QfA+HGMJbexdL6+0VULxXX/Th/hs/gFB/tH6l/vXXe+X6Sf9PjlaZ5xzjTuRu3xQVIR5mGLjO3NAOpYzw=="
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{url_for('static', filename = 'style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'stackedbar.css')}}">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <section id="header" class="section hero" style="background-image: url({{url_for('static', filename='img/6.png')}}">
+        <h1 class="title">Theia</h1>
+        <h2 class="subtitle">Explore Rhea, the Enzymatic Reaction Database</h2>
+    </section>
+    <section class="section">
+        {% block content %}{% endblock %}
+    </section>
+    <footer class="footer" style="background-image: url({{url_for('static', filename='img/25.png')}}">
+        <div class="content has-text-centered">
+            Loading animation and favicon created by <a href="https://www.flaticon.com/free-animated-icons/calculator"
+                target="_blank">Freepik - Flaticon</a>
+            <br />
+            Header and footer illustrations by <a href="https://creativemarket.com/brigantine"
+                target="_blank">Brigantine Designs</a> (Licensed).
+        </div>
+    </footer>
+    <script src="{{url_for('static', filename = 'notemplate.js')}}"></script>
+    <script src="{{url_for('static', filename = 'bulma-tabs.js')}}"></script>
+    <script type="text/javascript" src="https://unpkg.com/smiles-drawer@2.1.6/dist/smiles-drawer.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/tmap-faerun-js@1.0.12/dist/tmap.min.js"></script>
+    <script>
+        /*
+        * Toggle bulma modals
+        */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Functions to open and close a modal
+            function openModal($el) {
+                $el.classList.add('is-active');
+            }
+
+            function closeModal($el) {
+                $el.classList.remove('is-active');
+            }
+
+            function closeAllModals() {
+                (document.querySelectorAll('.modal') || []).forEach(($modal) => {
+                    closeModal($modal);
+                });
+            }
+
+            // Add a click event on buttons to open a specific modal
+            (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
+                const modal = $trigger.dataset.target;
+                const $target = document.getElementById(modal);
+
+                $trigger.addEventListener('click', () => {
+                    openModal($target);
+                });
+            });
+
+            // Add a click event on various child elements to close the parent modal
+            (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
+                const $target = $close.closest('.modal');
+
+                $close.addEventListener('click', () => {
+                    closeModal($target);
+                });
+            });
+
+            // Add a keyboard event to close all modals
+            document.addEventListener('keydown', (event) => {
+                const e = event || window.event;
+
+                if (e.keyCode === 27) { // Escape key
+                    closeAllModals();
+                }
+            });
+        });
+    </script>
+
+    {% block foot %}{% endblock %}
+</body>
+
+</html>
