@@ -1,6 +1,6 @@
 flask==2.1.2
-drfp==0.2.6
-annoy==1.17.0
+drfp==0.3.6
+annoy==1.15.0
 # tmap-viz==1.0.16
 rdkit-pypi==2022.3.4
 # pycm==3.5
