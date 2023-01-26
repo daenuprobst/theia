@@ -37,12 +37,10 @@ from theia.ml import MLPClassifier, InferenceReactionDataset, ReactionDataset
 def plot(train_loss, val_loss):
     plt.clear_figure()
     plt.clear_data()
-    # plt.clear_color()
 
     plt.plot(train_loss, label="train_loss")
     plt.plot(val_loss, label="val_loss")
 
-    # plt.title("Multiple Data Set")
     plt.show()
 
 

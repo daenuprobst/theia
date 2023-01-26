@@ -22,6 +22,8 @@ models = {"rheadb": load_models("rheadb"), "ecreact": load_models("ecreact")}
 device = get_device()
 bp = Blueprint("predict", __name__)
 
+explainer_cache = {}
+
 
 @bp.route("/predict/ec", methods=["POST"])
 def ec():
@@ -39,7 +41,15 @@ def ec():
     dataset = InferenceReactionDataset([smiles])
 
     pred, probs, topk_indices = predict(model, device, dataset, label_encoder, 5)
-    explainer = get_deep_explainer(model, background, device)
+
+    explainer = None
+
+    if f"{source}.{m}" in explainer_cache:
+        explainer = explainer_cache[f"{source}.{m}"]
+    else:
+        explainer = get_deep_explainer(model, background, device)
+        explainer_cache[f"{source}.{m}"] = explainer
+
     explained_reactions = explain(
         dataset, explainer, label_encoder, probs, topk_indices, drfp_map
     )
