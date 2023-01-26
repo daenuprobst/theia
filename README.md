@@ -1,4 +1,8 @@
 # :anchor: Theia
+
+<!-- - <a href="#Quickstart">Quickstart</a>
+- <a href="#Quickstart">Colab</a> -->
+
 ## Quickstart
 As you need at least Python 3.9 to get started, I suggest you use conda to create an environment with an up-to-date Python versions (3.11 is really, really fast, so I suggest using this as soon as rdkit supports it). For now, let's go with Python 3.10: `conda create -n theia python==3.10 && conda activate theia` is all you need (ha). Then you can go ahead and install theia using pip (theia was taken, so make sure to install theia-pypi, except if you want to parse log files):
 ```
@@ -46,4 +50,39 @@ Of course, there are more models than `rhea.ec123`, which we used in the previou
 | ECREACT ECXY  | ECREACT 1.0 | `ecreact.ec12`  |
 | ECREACT ECXYZ | ECREACT 1.0 | `ecreact.ec123` |
 
-## Reproduction & Custom Models
+<!-- ## Colab
+You can also give the API a spin in this Google colab notebook. -->
+
+## Reproduction / Custom Models
+To get started, install the reproduction requirements with:
+```
+pip install -r reproduction_requirements.txt
+```
+The training, validation, and test sets used in the manuscript can be recreated using the following two commands (of course, you can plug in your own data sets here to get a custom model):
+```
+mkdir experiments/data
+python scripts/encode_split_data.py data/rheadb.csv.gz experiments/data/rheadb
+python scripts/encode_split_data.py data/ecreact-nofilter-1.0.csv.gz experiments/data/ecreact
+```
+The training of the models can be started with:
+```
+chmod +x train_all.sh
+./train_all.sh
+```
+If you want to train the 6 additional models for cross-validation, you can run the following:
+```
+chmod +x train_all_cross.sh
+./train_all_cross.sh
+```
+Finally, to reproduce the figures, you first have to run some additional data crunching scripts:
+```
+python scripts/class_counts.py data/ecreact-nofilter-1.0.csv.gz experiments/data/ecreact_counts.csv
+python scripts/class_counts.py data/rheadb.csv.gz experiments/data/rheadb_counts.csv
+```
+Then it's time to draw:
+```
+cd figures
+chmod +x generate_figures.sh
+./generate_figures.sh
+```
+fin.

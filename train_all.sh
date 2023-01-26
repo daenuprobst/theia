@@ -1,6 +1,6 @@
 SCRIPT_PATH='scripts'
-DATA_PATH='data-v5'
-MODEL_PATH='models-v5'
+DATA_PATH='experiments/data'
+MODEL_PATH='experiments/models'
 
 python ${SCRIPT_PATH}/train.py ${DATA_PATH}/rheadb-0-ec1-train.csv ${DATA_PATH}/rheadb-0-ec1-valid.csv ${DATA_PATH}/rheadb-0-ec1-test.csv ${MODEL_PATH}/rheadb-0-ec1
 python ${SCRIPT_PATH}/train.py ${DATA_PATH}/rheadb-0-ec12-train.csv ${DATA_PATH}/rheadb-0-ec12-valid.csv ${DATA_PATH}/rheadb-0-ec12-test.csv ${MODEL_PATH}/rheadb-0-ec12
