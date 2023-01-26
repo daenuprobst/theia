@@ -143,7 +143,5 @@ dmypy.json
 
 experiments/*
 !experiments/.gitkeep
-models/*
-!models/.gitkeep
 
 git-filter-repo
