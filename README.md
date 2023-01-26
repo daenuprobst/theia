@@ -1,4 +1,4 @@
-# Theia
+# :anchor: Theia
 ## Quickstart
 As you need at least Python 3.9 to get started, I suggest you use conda to create an environment with an up-to-date Python versions (3.11 is really, really fast, so I suggest using this as soon as rdkit supports it). For now, let's go with Python 3.10: `conda create -n theia python==3.10 && conda activate theia` is all you need (ha). Then you can go ahead and install theia using pip (theia was taken, so make sure to install theia-pypi, except if you want to parse log files):
 ```
