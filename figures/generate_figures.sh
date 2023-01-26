@@ -1,5 +1,5 @@
-MODEL_PATH='../models-v5'
-DATA_PATH='../data-v5'
+MODEL_PATH='../experiments/models'
+DATA_PATH='../experiments/data'
 
 python heatmap.py ${MODEL_PATH}/rheadb-0-ec1.cm ${MODEL_PATH}/rheadb-0-ec12.cm ${MODEL_PATH}/rheadb-0-ec123.cm \
 ${MODEL_PATH}/ecreact-0-ec1.cm ${MODEL_PATH}/ecreact-0-ec12.cm ${MODEL_PATH}/ecreact-0-ec123.cm \
@@ -42,3 +42,5 @@ python accuracy_vs_size.py ${DATA_PATH}/ecreact_counts.csv ${MODEL_PATH}/ecreact
 --title 'ECREACT Classes' \
 --title 'ECREACT Subclasses' \
 --title 'ECREACT Sub-Subclasses'
+
+python tmaps.py ../experiments/data
