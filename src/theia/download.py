@@ -1,6 +1,0 @@
-def models():
-    ...
-
-
-def data():
-    ...

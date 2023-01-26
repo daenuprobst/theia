@@ -20,20 +20,8 @@ from sklearn.preprocessing import LabelEncoder
 from rdkit.Chem import rdChemReactions
 from rdkit.Chem import AllChem
 
+from theia import dm
 from theia.ml import ExplainedReaction, MLPClassifier, ReactionDataset
-
-
-def new_path(file: str, folder: str = "data"):
-    return Path(files(f"theia.{folder}"), file)
-
-
-def get_path(file: str, folder: str = "data"):
-    p = Path(files(f"theia.{folder}"), file)
-
-    if not p or not p.exists():
-        raise Exception(f"File '{file}' not found in folder '{folder}'.")
-
-    return p
 
 
 def get_device():
@@ -52,7 +40,7 @@ def load_models(
     models = {}
 
     for name in names:
-        model_path = get_path(f"{source}-{split}-{name}.pt", "models")
+        model_path = dm.get_path(f"{source}-{split}-{name}.pt")
         if not model_path.exists():
             continue
 
@@ -61,15 +49,13 @@ def load_models(
         background = None
         drfp_map = None
 
-        with open(get_path(f"{source}-map.pkl", "models"), "rb") as f:
+        with open(dm.get_path(f"{source}-map.pkl"), "rb") as f:
             drfp_map = pickle.load(f)
 
-        with open(get_path(f"{source}-{split}-{name}-le.pkl", "models"), "rb") as f:
+        with open(dm.get_path(f"{source}-{split}-{name}-le.pkl"), "rb") as f:
             label_encoder: LabelEncoder = pickle.load(f)
 
-        with open(
-            get_path(f"{source}-{split}-{name}-background.pkl", "models"), "rb"
-        ) as f:
+        with open(dm.get_path(f"{source}-{split}-{name}-background.pkl"), "rb") as f:
             background: ReactionDataset = pickle.load(f)
 
         classifier = MLPClassifier(10240, 1664, len(label_encoder.classes_))

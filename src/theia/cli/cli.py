@@ -7,6 +7,11 @@ import typer
 from rich.console import Console
 from rich.table import Table
 from theia.api import predict, predict_all
+from theia import download
+
+
+def download_internal():
+    download()
 
 
 def predict_internal(

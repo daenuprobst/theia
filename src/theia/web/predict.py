@@ -18,11 +18,16 @@ from theia.web.helpers import (
 )
 from theia.ml import InferenceReactionDataset
 
-models = {"rheadb": load_models("rheadb"), "ecreact": load_models("ecreact")}
-device = get_device()
+
 bp = Blueprint("predict", __name__)
 
+models = None
+device = get_device()
 explainer_cache = {}
+
+def init_models():
+    global models
+    models = {"rheadb": load_models("rheadb"), "ecreact": load_models("ecreact")}
 
 
 @bp.route("/predict/ec", methods=["POST"])
