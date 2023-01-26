@@ -34,11 +34,11 @@ def ec():
     m = params["model"]
     smiles = params["smiles"]
 
-    model, label_encoder, background, drfp_map = models[source][m]
+    model, label_encoder, background, drfp_map, opt_model = models[source][m]
     model = model.to(device)
     dataset = InferenceReactionDataset([smiles])
 
-    pred, probs, topk_indices = predict(model, device, dataset, label_encoder, 5)
+    pred, probs, topk_indices = predict(opt_model, device, dataset, label_encoder, 5)
     explainer = get_deep_explainer(model, background, device)
     explained_reactions = explain(
         dataset, explainer, label_encoder, probs, topk_indices, drfp_map
