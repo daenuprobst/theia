@@ -8,7 +8,11 @@ Thats pretty much it, now you can start theia by simply typing:
 ```
 theia
 ```
-and open the url `http://127.0.0.1:5000/` in your web browser. In case you don't want or need an UI, you can also use the cli to simply predict an EC number from an arbitrary reaction:
+and open the url `http://127.0.0.1:5000/` in your web browser. 
+
+<img src="https://github.com/daenuprobst/theia/raw/main/img/demo.gif">
+
+In case you don't want or need an UI, you can also use the cli to simply predict an EC number from an arbitrary reaction:
 ```
 theia-cli "rheadb.ec123" "S=C=NCC1=CC=CC=C1>>N#CSCC1=CC=CC=C1"
 ```
