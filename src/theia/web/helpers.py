@@ -14,6 +14,7 @@ from torch import load as load_module
 from torch.utils.data import DataLoader, Dataset
 from torch.nn import functional, Module
 from torch.autograd import Variable
+import intel_extension_for_pytorch as ipex
 
 from sklearn.preprocessing import LabelEncoder
 
@@ -75,6 +76,7 @@ def load_models(
         classifier = MLPClassifier(10240, 1664, len(label_encoder.classes_))
         classifier.load_state_dict(load_module(model_path))
         classifier.eval()
+        classifier = ipex.optimize(classifier)
 
         models[name] = (classifier, label_encoder, background, drfp_map)
 
