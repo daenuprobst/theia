@@ -1,7 +1,8 @@
 # :anchor: Theia
 
-<!-- - <a href="#Quickstart">Quickstart</a>
-- <a href="#Quickstart">Colab</a> -->
+- <a href="#quickstart">Quickstart</a>
+- <a href="#colab">Colab</a>
+- <a href="#reproduction--custom-models">Reproduction / Custom Models</a>
 
 ## Quickstart
 As you need at least Python 3.9 to get started, I suggest you use conda to create an environment with an up-to-date Python versions (3.11 is really, really fast, so I suggest using this as soon as rdkit supports it). For now, let's go with Python 3.10: `conda create -n theia python==3.10 && conda activate theia` is all you need (ha). Then you can go ahead and install theia using pip (theia was taken, so make sure to install theia-pypi, except if you want to parse log files):
@@ -50,8 +51,8 @@ Of course, there are more models than `rhea.ec123`, which we used in the previou
 | ECREACT ECXY  | ECREACT 1.0 | `ecreact.ec12`  |
 | ECREACT ECXYZ | ECREACT 1.0 | `ecreact.ec123` |
 
-<!-- ## Colab
-You can also give the API a spin in this Google colab notebook. -->
+## Colab
+You can also give the API a spin in <a href="https://colab.research.google.com/drive/1QNIuoWp5QPjsC0X3oX4_ogLEcBrpVSEg?usp=sharing" target="_blank">this Google colab notebook</a>. Keep in mind that Colab has old and slow CPUs with outdated instruction sets, so you might want to turn the GPU on. On a modern CPU both training and inference is fairly fast.
 
 ## Reproduction / Custom Models
 To get started, install the reproduction requirements with:

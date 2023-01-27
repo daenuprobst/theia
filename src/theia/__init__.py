@@ -1,5 +1,5 @@
 """Explainable EC number predictions from reactions."""
-__version__ = "0.2"
+__version__ = "0.5"
 
 from .data_manager import DataManager
 

@@ -1,6 +1,5 @@
 # Disable the "IPython could not be loaded!" warning
 import pickle
-from importlib.resources import files, as_file
 from typing import Tuple, List, Dict, Set
 from collections import defaultdict
 from pathlib import Path

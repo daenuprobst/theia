@@ -14,5 +14,6 @@ COPY ./README.md .
 COPY ./gunicorn_start.sh .
 RUN pip install gunicorn
 RUN pip install .
+RUN theia-download
 RUN chmod +x gunicorn_start.sh
 ENTRYPOINT ["./gunicorn_start.sh"]
