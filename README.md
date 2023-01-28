@@ -59,7 +59,7 @@ You can also give the API a spin in <a href="https://colab.research.google.com/d
 ## Web
 A demo of the web application can be found <a href="https://lts2.epfl.ch/theia/">here</a>. Keep in mind that this service has limited resources and that a locally installed version (even on your laptop) will be much, much faster.
 
-## Web
+## Docker
 A docker image is available on the docker hub <a href="https://hub.docker.com/r/daenuprobst/theia">here</a>. After running the docker image, the app will be available at `https://localhost:8000/theia`.
 
 ## Reproduction / Custom Models
