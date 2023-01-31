@@ -6,6 +6,17 @@
 - <a href="#docker">Docker</a>
 - <a href="#reproduction--custom-models">Reproduction / Custom Models</a>
 
+Please cite: https://www.biorxiv.org/content/10.1101/2023.01.28.526009v1
+```
+@article{10.1101/2023.01.28.526009, 
+  year = {2023}, 
+  title = {{Explainable prediction of catalysing enzymes from reactions using multilayer perceptrons}}, 
+  author = {Probst, Daniel}, 
+  doi = {10.1101/2023.01.28.526009},
+  note = {bioRxiv 2023.01.28.526009},
+}
+```
+
 ## Quickstart
 As you need at least Python 3.9 to get started, I suggest you use conda to create an environment with an up-to-date Python versions (3.11 is really, really fast, so I suggest using this as soon as rdkit supports it). For now, let's go with Python 3.10: `conda create -n theia python==3.10 && conda activate theia` is all you need (ha). Then you can go ahead and install theia using pip (theia was taken, so make sure to install theia-pypi, except if you want to parse log files):
 ```
