@@ -13,7 +13,7 @@ ${MODEL_PATH}/ecreact-0-ec1.cm ${MODEL_PATH}/ecreact-0-ec12.cm ${MODEL_PATH}/ecr
 
 python training_metrics.py ${MODEL_PATH}/rheadb-0-ec1.metrics.pkl ${MODEL_PATH}/rheadb-0-ec12.metrics.pkl ${MODEL_PATH}/rheadb-0-ec123.metrics.pkl \
 ${MODEL_PATH}/ecreact-0-ec1.metrics.pkl ${MODEL_PATH}/ecreact-0-ec12.metrics.pkl ${MODEL_PATH}/ecreact-0-ec123.metrics.pkl \
---cols 3 --rows 2 \
+--cols 2 --rows 3 \
 --title 'ECX$_{\text{Rhea}}$' \
 --title 'ECXY$_{\text{Rhea}}$' \
 --title 'ECXYZ$_{\text{Rhea}}$' \
