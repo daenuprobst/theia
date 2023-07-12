@@ -241,6 +241,7 @@ def main(input_path: str):
 
     plt.savefig(f"tmap.svg")
     plt.savefig(f"tmap.pdf")
+    plt.savefig(f"tmap.eps")
     plt.savefig(f"tmap.png", dpi=300)
 
 

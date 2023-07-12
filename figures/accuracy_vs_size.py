@@ -132,6 +132,7 @@ def main(
 
     plt.savefig(f"{outname}.svg")
     plt.savefig(f"{outname}.pdf")
+    plt.savefig(f"{outname}.eps")
     plt.savefig(f"{outname}.png", dpi=300)
 
     # for data_file, t, ax in zip(data_files, title, axs_flattened):

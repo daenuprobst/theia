@@ -74,6 +74,7 @@ def main(
 
     plt.savefig(f"training-metrics.pdf")
     plt.savefig(f"training-metrics.svg")
+    plt.savefig(f"training-metrics.eps")
     plt.savefig(f"training-metrics.png", dpi=300)
 
 

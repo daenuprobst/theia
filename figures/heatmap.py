@@ -118,6 +118,8 @@ def main(
                 im, data=plt_cm, valfmt="{x:.3f}", size=SMALL_SIZE - 1
             )
 
+        ax.set_facecolor("white")
+
         # ax.set_xlabel("Predicted")
         # ax.set_ylabel("Ground Truth")
 
@@ -128,6 +130,7 @@ def main(
 
     plt.savefig(f"confusion-matrix.svg")
     plt.savefig(f"confusion-matrix.pdf")
+    plt.savefig(f"confusion-matrix.eps")
     plt.savefig(f"confusion-matrix.png", dpi=300)
 
 

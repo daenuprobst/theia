@@ -48,6 +48,9 @@ def heatmap(
 
     data = np.nan_to_num(data)
 
+    background = np.full((*data.shape, 3), 255, dtype=np.uint8)
+    ax.imshow(background)
+
     # Plot the heatmap
     im = ax.imshow(
         data,
