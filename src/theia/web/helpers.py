@@ -327,3 +327,134 @@ def explain(
         results.append(explained_reaction)
 
     return results
+
+def explain_regression(
+    data_set: Dataset,
+    explainer: Explainer,
+    drfp_map: Dict[int, Set[str]],
+) -> ExplainedReaction:
+    rxns = data_set.rxns
+    mappings = data_set.mappings
+    shingling = data_set.shinglings
+    fps = data_set.X
+    data_sample = next(iter(DataLoader(data_set)))
+
+    shap_params = {}
+    if isinstance(explainer, KernelExplainer):
+        data_sample = data_sample.numpy()
+        shap_params["silent"] = True
+
+    shap_values = explainer.shap_values(data_sample, *shap_params)
+    weights = shap_values[0][0]
+    rxn = rxns[0]
+    mapping = mappings[0]
+    fp = fps[0].numpy()
+
+    rxn = rdChemReactions.ReactionFromSmarts(rxn, useSmiles=True)
+
+    reactants = [mol for mol in rxn.GetReactants()]
+    for mol in reactants:
+        mol.UpdatePropertyCache()
+        mol = AllChem.AddHs(mol)
+
+    products = [mol for mol in rxn.GetProducts()]
+    for mol in products:
+        mol.UpdatePropertyCache()
+        mol = AllChem.AddHs(mol)
+
+    reactant_highlights = [set() for _ in range(len(reactants))]
+    product_highlights = [set() for _ in range(len(products))]
+
+    reactant_weights = [defaultdict(float) for _ in range(len(reactants))]
+    product_weights = [defaultdict(float) for _ in range(len(products))]
+
+    neg_reactant_weights = [defaultdict(float) for _ in range(len(reactants))]
+    neg_product_weights = [defaultdict(float) for _ in range(len(products))]
+
+    pos_reactant_weights = [defaultdict(float) for _ in range(len(reactants))]
+    pos_product_weights = [defaultdict(float) for _ in range(len(products))]
+
+    weights = shap_values[0]
+    top_k_missing = get_top_missing_fragments(fp, weights, drfp_map)
+
+    reactant_fragments = {}
+    product_fragments = {}
+
+    for i in range(len(reactant_weights)):
+        for j in range(reactants[i].GetNumHeavyAtoms()):
+            reactant_weights[i][j] = 0.0
+            neg_reactant_weights[i][j] = 0.0
+            pos_reactant_weights[i][j] = 0.0
+
+    for i in range(len(product_weights)):
+        for j in range(products[i].GetNumHeavyAtoms()):
+            product_weights[i][j] = 0.0
+            neg_product_weights[i][j] = 0.0
+            pos_product_weights[i][j] = 0.0
+
+    for reactant_index, reactant in enumerate(mapping["reactants"]):
+        for bit, atom_indices in reactant.items():
+            for ais in atom_indices:
+                for ai in ais:
+                    reactant_highlights[reactant_index].update(ai)
+                    for idx in ai:
+                        weigth = weights[bit]
+
+                        reactant_fragments[int(bit)] = (
+                            list(shingling[bit]),
+                            float(weigth),
+                        )
+
+                        reactant_weights[reactant_index][idx] += weigth
+
+                        if weigth < 0.0:
+                            neg_reactant_weights[reactant_index][idx] += weigth
+                        else:
+                            pos_reactant_weights[reactant_index][idx] += weigth
+
+    for product_index, product in enumerate(mapping["products"]):
+        for bit, atom_indices in product.items():
+            for ais in atom_indices:
+                for ai in ais:
+                    product_highlights[product_index].update(ai)
+                    for idx in ai:
+                        weight = weights[bit]
+
+                        product_fragments[int(bit)] = (
+                            list(shingling[bit]),
+                            float(weight),
+                        )
+
+                        product_weights[product_index][idx] += weight
+
+                        if weight < 0.0:
+                            neg_product_weights[product_index][idx] += weight
+                        else:
+                            pos_product_weights[product_index][idx] += weight
+
+    reactant_weights = merge_hydrogens(reactant_weights, reactants)
+    product_weights = merge_hydrogens(product_weights, products)
+    neg_reactant_weights = merge_hydrogens(neg_reactant_weights, reactants)
+    neg_product_weights = merge_hydrogens(neg_product_weights, products)
+    pos_reactant_weights = merge_hydrogens(pos_reactant_weights, reactants)
+    pos_product_weights = merge_hydrogens(pos_product_weights, products)
+
+    explained_reaction = ExplainedReaction(
+        rxns[0],
+        "",
+        weights,
+        [list(w.values()) for w in reactant_weights],
+        [list(w.values()) for w in product_weights],
+        [list(w.values()) for w in neg_reactant_weights],
+        [list(w.values()) for w in neg_product_weights],
+        [list(w.values()) for w in pos_reactant_weights],
+        [list(w.values()) for w in pos_product_weights],
+        list(reactant_fragments.values()),
+        list(product_fragments.values()),
+        top_k_missing,
+        0.0,
+    )
+
+    explained_reaction.remove_explicit_hydrogens()
+
+    return explained_reaction
