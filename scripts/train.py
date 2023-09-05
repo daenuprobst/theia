@@ -1,4 +1,5 @@
 import re
+import random
 import pickle
 from pathlib import Path
 from typing import List
@@ -395,7 +396,9 @@ def explain(data_set, explainer, label_encoder, probs, indices):
 @click.argument("test", type=str)
 @click.argument("valid", type=str)
 @click.argument("output", type=str)
-def main(train, valid, test, output):
+@click.option("--shuffle-fraction", default=0.0, type=float)
+def main(train, valid, test, output, shuffle_fraction=0.0):
+    random.seed(42)
     device = get_device()
 
     model_file = Path(f"{output}.pt")
@@ -412,6 +415,24 @@ def main(train, valid, test, output):
     df_train = pd.read_csv(train)
     df_valid = pd.read_csv(valid)
     df_test = pd.read_csv(test)
+
+    if shuffle_fraction > 0.0:
+        n_shuffle = int(len(df_train) * shuffle_fraction)
+
+        rows = random.sample(range(1, len(df_train)), n_shuffle)
+
+        rnd = np.random.RandomState(seed=42)
+        df_train.loc[rows, "label"] = rnd.permutation(
+            df_train.loc[rows, "label"],
+        )
+
+        model_file = Path(f"{output}-shuffle-{shuffle_fraction}.pt")
+        cm_file = Path(f"{output}-shuffle-{shuffle_fraction}.cm")
+        training_metrics_file = Path(f"{output}-shuffle-{shuffle_fraction}.metrics.pkl")
+        label_encoder_file = Path(f"{output}-shuffle-{shuffle_fraction}-le.pkl")
+        explainer_background_file = Path(
+            f"{output}-shuffle-{shuffle_fraction}-background.pkl"
+        )
 
     df_train["fps"] = df_train.fps.apply(
         lambda x: np.array(list(map(int, x.split(";"))))

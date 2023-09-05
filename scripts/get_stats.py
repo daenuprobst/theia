@@ -21,6 +21,9 @@ def main(cm_files: List[str]):
     if len(acc) > 1 and len(f1) > 1:
         print("acc", round(mean(acc), 3), round(stdev(acc), 3))
         print("f1", round(mean(f1), 3), round(stdev(f1), 3))
+        print(
+            f"${round(mean(acc), 2)}\\pm{round(stdev(acc), 2)}$ (${round(mean(f1), 2)}\\pm{round(stdev(f1), 2)}$)"
+        )
     else:
         print("acc", round(mean(acc), 3))
         print("f1", round(mean(f1), 3))

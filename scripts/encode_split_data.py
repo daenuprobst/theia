@@ -1,7 +1,7 @@
 from pathlib import Path
-import click
 import typer
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import StratifiedShuffleSplit
 from drfp import DrfpEncoder
 
