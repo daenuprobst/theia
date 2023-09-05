@@ -22,6 +22,10 @@ As you need at least Python 3.9 to get started, I suggest you use conda to creat
 ```
 pip install theia-pypi
 ```
+Next, download the models using the CLI command:
+```
+theia-download
+```
 Thats pretty much it, now you can start theia by simply typing:
 ```
 theia
