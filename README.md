@@ -8,7 +8,7 @@
 
 Please cite: <https://www.biorxiv.org/content/10.1101/2023.01.28.526009v1>
 
-```
+```text
 @article{10.1101/2023.01.28.526009, 
   year = {2023}, 
   title = {{Explainable prediction of catalysing enzymes from reactions using multilayer perceptrons}}, 
@@ -22,19 +22,19 @@ Please cite: <https://www.biorxiv.org/content/10.1101/2023.01.28.526009v1>
 
 As you need at least Python 3.9 to get started, I suggest you use conda to create an environment with an up-to-date Python versions (3.11 is really, really fast, so I suggest using this as soon as rdkit supports it). For now, let's go with Python 3.10: `conda create -n theia python==3.10 && conda activate theia` is all you need (ha). Then you can go ahead and install theia using pip (theia was taken, so make sure to install theia-pypi, except if you want to parse log files):
 
-```
+```sh
 pip install theia-pypi
 ```
 
 Next, download the models using the CLI command:
 
-```
+```sh
 theia-download
 ```
 
 Thats pretty much it, now you can start theia by simply typing:
 
-```
+```sh
 theia
 ```
 
@@ -44,25 +44,25 @@ and open the url `http://127.0.0.1:5000/` in your web browser.
 
 In case you don't want or need an UI, you can also use the cli to simply predict an EC number from an arbitrary reaction:
 
-```
+```sh
 theia-cli "rheadb.ec123" "S=C=NCC1=CC=CC=C1>>N#CSCC1=CC=CC=C1"
 ```
 
 If you want a bit more information than just the predicted EC class, you can also get the top-5 probabilities:
 
-```
+```sh
 theia-cli "rheadb.ec123" "S=C=NCC1=CC=CC=C1>>N#CSCC1=CC=CC=C1" --probs
 ```
 
 Or, if you want human-readable output, you can make it pretty:
 
-```
+```sh
 theia-cli "rheadb.ec123" "S=C=NCC1=CC=CC=C1>>N#CSCC1=CC=CC=C1" --probs --pretty
 ```
 
 and you'll get a neat table...
 
-```
+```sh
 ┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
 ┃ Prediction ┃ Probability [%] ┃
 ┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
@@ -100,14 +100,14 @@ A docker image is available on the docker hub <a href="https://hub.docker.com/r/
 
 To get started, install the reproduction requirements with:
 
-```
+```sh
 pip install .
 pip install -r reproduction_requirements.txt
 ```
 
 The training, validation, and test sets used in the manuscript can be recreated using the following two commands (of course, you can plug in your own data sets here to get a custom model):
 
-```
+```sh
 mkdir experiments/data
 python scripts/encode_split_data.py data/rheadb.csv.gz experiments/data/rheadb
 python scripts/encode_split_data.py data/ecreact-nofilter-1.0.csv.gz experiments/data/ecreact
@@ -115,7 +115,7 @@ python scripts/encode_split_data.py data/ecreact-nofilter-1.0.csv.gz experiments
 
 The training of the models can be started with:
 
-```
+```sh
 mkdir experiments/models
 chmod +x train_all.sh
 ./train_all.sh
@@ -123,24 +123,32 @@ chmod +x train_all.sh
 
 If you want to train the 6 additional models for cross-validation, you can run the following:
 
-```
+```sh
 chmod +x train_all_cross.sh
 ./train_all_cross.sh
 ```
 
 Finally, to reproduce the figures, you first have to run some additional data crunching scripts:
 
-```
+```sh
 python scripts/class_counts.py data/ecreact-nofilter-1.0.csv.gz experiments/data/ecreact_counts.csv
 python scripts/class_counts.py data/rheadb.csv.gz experiments/data/rheadb_counts.csv
 ```
 
 Then it's time to draw:
 
-```
+```sh
 cd figures
 chmod +x generate_figures.sh
 ./generate_figures.sh
+```
+
+As a bonus, the ablation studies, where a fraction of the training set labels are randomised can be run
+using an additional script:
+
+```sh
+chmod +x train_rhea_ablation.sh
+./train_rhea_ablation.sh
 ```
 
 fin.
