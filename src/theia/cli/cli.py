@@ -26,7 +26,15 @@ def predict_internal(
     probs: Optional[bool] = False,
     pretty: Optional[bool] = False,
 ):
-    if Path(rxn_smiles).exists():
+    is_path = False
+
+    try:
+        if Path(rxn_smiles).exists():
+            is_path = True
+    except:
+        ...  # Not raising or warning as exception will be thrown through malformed smiles
+
+    if is_path:
         with open(rxn_smiles, "r") as f:
             for val in predict_all(model, f, topk, False, probs):
                 if not probs:
