@@ -21,3 +21,5 @@ dependencies:
     - shap==0.41.0
     - sentry-sdk[flask]
     - intel_extension_for_pytorch
+    - requests==2.32.3
+    - platformdirs==4.2.2
