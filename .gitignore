@@ -141,8 +141,7 @@ dmypy.json
 !rhea-reactions.csv.gz
 !ecreact-nofilter-1.0.csv.gz
 
-/experiments
-models/*
-!models/.gitkeep
+experiments/*
+!experiments/.gitkeep
 
 git-filter-repo

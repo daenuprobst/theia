@@ -9,7 +9,14 @@ import numpy as np
 
 
 class InferenceReactionDataset(Dataset):
-    def __init__(self, rxns: List, label: str = "label"):
+    def __init__(
+            self, rxns: List, 
+            label: str = "label", 
+            root_central_atom: bool=False, 
+            radius: int = 2, 
+            include_hydrogens: bool = True, 
+            n_folded_length: int = 10240
+    ):
         self.rxns = rxns
         self.size = len(rxns)
         self.label = label
@@ -18,10 +25,10 @@ class InferenceReactionDataset(Dataset):
             rxns,
             mapping=True,
             atom_index_mapping=True,
-            root_central_atom=False,
-            radius=2,
-            include_hydrogens=True,
-            n_folded_length=10240,
+            root_central_atom=root_central_atom,
+            radius=radius,
+            include_hydrogens=include_hydrogens,
+            n_folded_length=n_folded_length,
         )
 
         self.mappings = mappings

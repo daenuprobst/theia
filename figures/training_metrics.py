@@ -33,7 +33,7 @@ def main(
 ):
     fig, axs = plt.subplots(rows, cols)
     fig.set_figheight(3.54331)
-    fig.set_figwidth(7.20472)
+    fig.set_figwidth(3.54331)
 
     if len(data_files) != rows * cols:
         raise ValueError(
@@ -74,6 +74,7 @@ def main(
 
     plt.savefig(f"training-metrics.pdf")
     plt.savefig(f"training-metrics.svg")
+    plt.savefig(f"training-metrics.eps")
     plt.savefig(f"training-metrics.png", dpi=300)
 
 

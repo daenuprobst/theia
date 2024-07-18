@@ -8,5 +8,7 @@ COPY ./requirements.txt .
 RUN conda install pytorch cpuonly pandas=1.4.3 scikit-learn=1.1.1 -c pytorch
 RUN pip install gunicorn
 RUN pip install sentry-sdk[flask]
-RUN pip install -U -r  requirements.txt
+RUN pip install .
+RUN theia-download
+RUN chmod +x gunicorn_start.sh
 ENTRYPOINT ["/usr/src/app/theia/gunicorn_start.sh"]

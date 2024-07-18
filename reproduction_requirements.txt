@@ -1,0 +1,6 @@
+pycm==3.7
+matplotlib==3.6.3
+plotext==5.2.8
+scienceplots==2.0.1
+seaborn==0.12.2
+tmap-viz==1.0.16

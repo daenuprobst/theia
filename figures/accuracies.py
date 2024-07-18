@@ -127,6 +127,7 @@ def main(
 
     plt.savefig(f"accuracies.svg")
     plt.savefig(f"accuracies.pdf")
+    plt.savefig(f"accuracies.eps")
     plt.savefig(f"accuracies.png", dpi=300)
 
     # for data_file, t, ax in zip(data_files, title, axs_flattened):

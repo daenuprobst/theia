@@ -6,26 +6,34 @@ from werkzeug.exceptions import abort
 
 from drfp import DrfpEncoder
 from annoy import AnnoyIndex
-from theia.web.helpers import get_path, new_path
+
+from theia import dm
 
 bp = Blueprint("search", __name__)
 
-model_file = None
+annoy_index = None
+rheadb = None
+rhea_reactions = None
 
-try:
-    model_file = get_path(f"rhea-drfp.ann", "models")
-except:
-    model_file = new_path(f"rhea-drfp.ann", "models")
-    with gzip.open(get_path(f"rhea-drfp.ann.gz", "models"), "rb") as f_in:
-        with open(model_file, "wb") as f_out:
-            copyfileobj(f_in, f_out)
 
-annoy_index = AnnoyIndex(2048, metric="angular")
-annoy_index.load(str(model_file))
+def init_search_db():
+    global annoy_index
+    global rheadb
+    global rhea_reactions
 
-rheadb = pd.read_csv(get_path("rheadb.csv.gz")).fillna("-")
-rhea_reactions = pd.read_csv(get_path("rhea-reactions.csv.gz"))
-rhea_reactions = rhea_reactions.set_index("RHEA_ID")
+    model_file = dm.new_path(f"rhea-drfp.ann")
+
+    if not dm.exists(f"rhea-drfp.ann"):
+        with gzip.open(dm.get_path(f"rhea-drfp.ann.gz"), "rb") as f_in:
+            with open(model_file, "wb") as f_out:
+                copyfileobj(f_in, f_out)
+
+    annoy_index = AnnoyIndex(2048, metric="angular")
+    annoy_index.load(str(model_file))
+
+    rheadb = pd.read_csv(dm.get_path("rheadb.csv.gz")).fillna("-")
+    rhea_reactions = pd.read_csv(dm.get_path("rhea-reactions.csv.gz"))
+    rhea_reactions = rhea_reactions.set_index("RHEA_ID")
 
 
 @bp.route("/")
