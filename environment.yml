@@ -12,7 +12,8 @@ dependencies:
   - scikit-learn=1.1.1
   - tqdm=4.64.1
   - pip:
-    - flask==2.1.2
+    - flask==2.2.2
+    - werkzeug==2.3.7
     - drfp==0.3.6
     - annoy==1.15.0
     - rdkit-pypi==2022.3.4
