@@ -1,7 +1,7 @@
 name: theia
 channels:
   - pytorch
-  - defaults
+  - conda-forge
 dependencies:
   - cpuonly=2.0
   - gunicorn=20.1.0
