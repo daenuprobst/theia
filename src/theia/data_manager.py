@@ -10,7 +10,7 @@ from tqdm.auto import tqdm
 
 class DataManager:
     def __init__(self):
-        self.data_path = platformdirs.user_data_path("theia", "daenuprobst")
+        self.data_path = platformdirs.site_data_path("theia", "daenuprobst")
         if not self.data_path.exists():
             try:
                 self.data_path.mkdir(parents=True, exist_ok=True)
